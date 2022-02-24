@@ -62,18 +62,18 @@ public class MainActivity extends AppCompatActivity {
     public List<Maison> getMaison(String searchTerm)
     {
         maisonList.clear();
-        String myUrl="https://us-real-estate.p.rapidapi.com/v2/for-sale?offset=0&limit=42&&city=" + searchTerm + "&sort=newest";
+        String myUrl="https://us-real-estate.p.rapidapi.com/v2/for-sale?offset=0&limit=42&state_code=MI&city=" + searchTerm + "&sort=newest";
         JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, myUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 
                 try {
-                    JSONArray dataArray = response.getJSONArray("data");
-                    {
-                        JSONArray home_searchArray = response.getJSONArray("home_search");
-                        {
-                            JSONArray resultsArray = response.getJSONArray("results");
+                    JSONObject dataObject=response.getJSONObject("data");
+                    JSONObject home_searchObject=dataObject.getJSONObject("home_search");
+                            JSONArray resultsArray = home_searchObject.getJSONArray("results");
                             for (int l = 0; l < resultsArray.length(); l++) {
+
+
                                 JSONObject maisonObj = resultsArray.getJSONObject(l);
                                 Maison maison = new Maison();
 
@@ -81,40 +81,34 @@ public class MainActivity extends AppCompatActivity {
                                 maison.setList_price(maisonObj.getString("list_price"));
                                 maison.setStatus(maisonObj.getString("status"));
 
-                                JSONArray descriptionArray = response.getJSONArray("description");
-                                {
-                                    // BEDS, BATHS
-                                    maison.setBeds(maisonObj.getInt("baths"));
-                                    maison.setBaths(maisonObj.getInt("beds"));
-                                }
+                                JSONObject descriptionObject = maisonObj.getJSONObject("description");
+                                // BEDS, BATHS
+                                maison.setBeds(descriptionObject.getInt("baths"));
+                                maison.setBaths(descriptionObject.getInt("beds"));
 
-                                JSONArray locationArray = response.getJSONArray("location");
-                                {
-                                    JSONArray addressArray = response.getJSONArray("address");
-                                    {
-                                        // ADDRESS LINE
-                                        maison.setLine(maisonObj.getString("line"));
-                                    }
-                                }
+                                JSONObject locationObject = maisonObj.getJSONObject("location");
+                                JSONObject addressObject = locationObject.getJSONObject("address");
+                                // ADDRESS LINE
+                                maison.setLine(addressObject.getString("line"));
 
-                                JSONArray primary_photoArray = response.getJSONArray("primary_photo");
-                                {
-                                    // LINK TO PRIMARY PHOTO OF THE HOUSE
-                                    maison.setHref(maisonObj.getString("href"));
-                                }
+                                JSONObject primary_photoObject = null;
+                                primary_photoObject = maisonObj.getJSONObject("primary_photo");
 
-                                //Log.d("Maison =", maison.getList_price());
+                                // LINK TO PRIMARY PHOTO OF THE HOUSE
+                                maison.setHref(primary_photoObject.getString("href"));
+
                                 maisonList.add(maison);
+                                Log.d("rrr =", maison.getList_price());
+
                             }
-                        }
+                    maisonRecyclerViewAdapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                     }
-                    maisonRecyclerViewAdapter.notifyDataSetChanged();
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+
     }, new Response.ErrorListener() {
                 @Override
                         public void onErrorResponse(VolleyError error)

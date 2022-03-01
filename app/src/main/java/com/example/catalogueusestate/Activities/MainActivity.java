@@ -91,11 +91,17 @@ public class MainActivity extends AppCompatActivity {
                                 // ADDRESS LINE
                                 maison.setLine(addressObject.getString("line"));
 
-                                JSONObject primary_photoObject = null;
-                                primary_photoObject = maisonObj.getJSONObject("primary_photo");
+                                if(maisonObj.has("href")){
+                                JSONObject primary_photoObject = maisonObj.getJSONObject("primary_photo");
+                                maison.setHref("https://sc01.alicdn.com/kf/HTB1o9j7dyFTMKJjSZFAq6AkJpXa8/229360046/HTB1o9j7dyFTMKJjSZFAq6AkJpXa8.jpg");
+                                }
+                                else{
+                                    JSONObject primary_photoObject = maisonObj.getJSONObject("primary_photo");
+                                    maison.setHref(primary_photoObject.getString("href"));
 
+
+                                }
                                 // LINK TO PRIMARY PHOTO OF THE HOUSE
-                                maison.setHref(primary_photoObject.getString("href"));
 
                                 maisonList.add(maison);
                                 Log.d("rrr =", maison.getList_price());

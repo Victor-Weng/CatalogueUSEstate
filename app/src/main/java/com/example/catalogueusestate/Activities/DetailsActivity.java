@@ -56,15 +56,15 @@ public class DetailsActivity extends AppCompatActivity {
                 try {
 
                     storiesID_details.setText(response.getString("stories"));
-
-                    JSONArray price_historyArray = response.getJSONArray("price_history");
+                    JSONObject dataObject=response.getJSONObject("data");
+                    JSONArray price_historyArray = dataObject.getJSONArray("price_history");
                     {
-                        sold_priceID_details.setText(response.getString("price"));
+                        sold_priceID_details.setText(price_historyArray.getString(Integer.parseInt("price")));
                     }
 
-                    JSONArray noiseArray = response.getJSONArray("noise");
+                    JSONObject noiseObject = response.getJSONObject("noise");
                     {
-                        noise_scoreID_details.setText(response.getString("score"));
+                        noise_scoreID_details.setText(noiseObject.getString("score"));
                     }
 
 

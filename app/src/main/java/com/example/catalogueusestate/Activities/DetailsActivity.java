@@ -13,10 +13,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.catalogueusestate.Model.Maison;
 import com.example.catalogueusestate.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,9 +25,7 @@ import java.util.Map;
 
 public class DetailsActivity extends AppCompatActivity {
     private Maison maison;
-    private TextView  storiesID_details,sold_priceID_details, noise_scoreID_details;
-    private TextView listpriceID_details,statusID_details, bedID_details, bathID_details;
-    private ImageView primaryPhotoID_details;
+    private TextView  storiesID_details,noise_scoreID_details, display_property_typeID_details;
     private RequestQueue queue;
     private String maisonId;
 
@@ -36,35 +34,61 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+        queue = Volley.newRequestQueue(this);
 
-        maison = (Maison) getIntent().getSerializableExtra("maison"); //recuperer tous les elements
+       maison = (Maison) getIntent().getSerializableExtra("maison"); //recuperer tous les elements
         maisonId = maison.getproperty_id();
-        listpriceID_details=findViewById(R.id.listpriceID_details);
-        statusID_details=findViewById(R.id.statusID_details);
-        bedID_details=findViewById(R.id.bedID_details);
-        bathID_details=findViewById(R.id.bathID_details);
+        storiesID_details=findViewById(R.id.storiesID_details);
+        noise_scoreID_details=findViewById(R.id.noise_scoreID_details);
+        display_property_typeID_details=findViewById(R.id.display_property_typeID_details);
+
+
+        //Log.d("test1",maisonId);
+
+        getMaisonDetails(maisonId);
 
     }
 
     private void getMaisonDetails(String id)
     {
-        String myUrl="https://us-real-estate.p.rapidapi.com/v2/property-detail?property_id=" + maisonId;
+        String myUrl="https://us-real-estate.p.rapidapi.com/v2/property-detail?property_id=" + id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, myUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 
+
                 try {
 
-                    storiesID_details.setText(response.getString("stories"));
+
                     JSONObject dataObject=response.getJSONObject("data");
-                    JSONArray price_historyArray = dataObject.getJSONArray("price_history");
+                    JSONObject property_detailObject=dataObject.getJSONObject("property_detail");
+                    if(property_detailObject.has("stories") && !property_detailObject.isNull("stories")) {
+                      storiesID_details.setText("stories: " + property_detailObject.getString("stories"));
+                    }
+                    else
                     {
-                        sold_priceID_details.setText(price_historyArray.getString(Integer.parseInt("price")));
+                        storiesID_details.setText("stories: " + "N/A");
                     }
 
-                    JSONObject noiseObject = response.getJSONObject("noise");
+                   if(property_detailObject.has("display_property_type") && !property_detailObject.isNull("display_property_type")) {
+
+                      display_property_typeID_details.setText("property type: " + property_detailObject.getString("display_property_type"));
+                   }
+                   else
+                   {
+                       display_property_typeID_details.setText("property type: " + "N/A");
+                   }
+
+                    JSONObject noiseObject = property_detailObject.getJSONObject("noise");
                     {
-                        noise_scoreID_details.setText(noiseObject.getString("score"));
+                        if(noiseObject.has("score") && !noiseObject.isNull("score")) {
+                            // noise score est donnee en String pas int
+                       noise_scoreID_details.setText("noise score: " + noiseObject.getString("score") + "dB");
+                        }
+                        else
+                        {
+                            noise_scoreID_details.setText("noise score: " + "N/A");
+                        }
                     }
 
 
@@ -84,9 +108,11 @@ public class DetailsActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
 
-                //which ones do we put
-                params.put("x-rapidapi-host", "us-real-estate.p.rapidapi.com");
-                params.put("x-rapidapi-key", "ae8f8e47d9msh3220eb11d1277f7p1fec80jsn142c3ea073b6");
+               params.put("x-rapidapi-host", "us-real-estate.p.rapidapi.com");
+               params.put("x-rapidapi-key", "ae8f8e47d9msh3220eb11d1277f7p1fec80jsn142c3ea073b6");
+
+                //params.put("X-RapidAPI-Host","us-real-estate.p.rapidapi.com" );
+                //params.put("X-RapidAPI-Key", "31d289ed40msh7bde6504ce6fe00p151958jsna0ad9e40232e");
                 return params;
             }};
         ;

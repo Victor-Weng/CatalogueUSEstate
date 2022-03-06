@@ -44,7 +44,7 @@ public class MaisonRecyclerViewAdapter extends RecyclerView.Adapter<MaisonRecycl
     {
         Maison maison=maisonList.get(position);
         String Href=maison.getHref();
-        holder.List_Price.setText(maison.getList_price());
+        holder.List_Price.setText("$"+maison.getList_price());
         holder.Address.setText(maison.getLine());
         holder.Status.setText(maison.getStatus());
         holder.Bed.setText("Beds: " + Integer.toString(maison.getBeds()));
@@ -82,6 +82,7 @@ public class MaisonRecyclerViewAdapter extends RecyclerView.Adapter<MaisonRecycl
                     Intent intent=new Intent(context, DetailsActivity.class);
                     intent.putExtra("maison", maison);
                     ctx.startActivity(intent);
+
 
 
                 }

@@ -4,8 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Victo/AndroidStudioProjects/CatalogueUSEstate/app/src/main/res/layout/activity_details.xml" value="0.4" />
-        <entry key="..\:/Users/Victo/AndroidStudioProjects/CatalogueUSEstate/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/Victo/AndroidStudioProjects/CatalogueUSEstate/app/src/main/res/layout/activity_main.xml" value="0.4" />
         <entry key="..\:/Users/Victo/AndroidStudioProjects/CatalogueUSEstate/app/src/main/res/layout/house.xml" value="0.4" />
+        <entry key="..\:/Users/Victo/AndroidStudioProjects/CatalogueUSEstate/app/src/main/res/menu/recherche.xml" value="0.234375" />
       </map>
     </option>
   </component>

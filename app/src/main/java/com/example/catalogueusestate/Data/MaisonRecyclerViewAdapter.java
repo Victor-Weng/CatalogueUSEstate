@@ -47,9 +47,12 @@ public class MaisonRecyclerViewAdapter extends RecyclerView.Adapter<MaisonRecycl
         holder.List_Price.setText("$"+maison.getList_price());
         holder.Address.setText(maison.getLine());
         holder.Status.setText(maison.getStatus());
-        holder.Bed.setText("Beds: " + Integer.toString(maison.getBeds()));
-        holder.Bath.setText("Baths: " +Integer.toString(maison.getBaths()));
-
+        if(maison.getBeds() != null) {
+            holder.Bed.setText("Beds: " + Integer.toString(maison.getBeds()));
+        }
+        if(maison.getBaths() != null) {
+            holder.Bath.setText("Baths: " + Integer.toString(maison.getBaths()));
+        }
 
         Picasso.get()
                 .load(Href)

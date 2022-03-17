@@ -14,10 +14,12 @@ public class Prefs
     }
     public String getSearch()
     {
-        return sharedPreferences.getString("search", "Detroit");
+        return sharedPreferences.getString("search", "huntsville");
     }
+    public String getSearchState() { return sharedPreferences.getString("searchState", "AL"); }
+
     public void setSearch(String search)
     {
-        sharedPreferences.edit().putString("search","Detroit");
+        sharedPreferences.edit().putString("search","huntsville");
     }
 }

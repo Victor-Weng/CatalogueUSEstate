@@ -1,9 +1,14 @@
 package com.example.catalogueusestate.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +53,7 @@ public class DetailsActivity extends AppCompatActivity {
         getMaisonDetails(maisonId);
 
     }
+
 
     private void getMaisonDetails(String id)
     {
